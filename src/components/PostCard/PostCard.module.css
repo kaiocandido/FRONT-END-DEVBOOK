@@ -10,8 +10,26 @@
 
 .header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 12px;
+}
+
+.autorBloco {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.autorNome {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.autorNome:hover {
+  opacity: 0.9;
 }
 
 .autor {
@@ -21,11 +39,14 @@
   font-size: 0.9rem;
 }
 
-.autor:hover { text-decoration: underline; }
+.autor:hover {
+  text-decoration: underline;
+}
 
 .data {
   font-size: 0.8rem;
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .titulo {
@@ -60,8 +81,30 @@
   transition: all 0.2s;
 }
 
-.curtir:hover { border-color: #e05; color: #e05; }
-.curtido { border-color: #e05 !important; color: #e05 !important; }
+.curtir:hover {
+  border-color: #e05;
+  color: #e05;
+}
+
+.curtido {
+  border-color: #e05 !important;
+  color: #e05 !important;
+}
+
+.editar {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 0.82rem;
+  cursor: pointer;
+  margin-left: auto;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.editar:hover {
+  opacity: 1;
+}
 
 .deletar {
   background: none;
@@ -69,26 +112,55 @@
   color: var(--danger);
   font-size: 0.82rem;
   cursor: pointer;
-  margin-left: auto;
   opacity: 0.7;
   transition: opacity 0.2s;
 }
 
-.deletar:hover { opacity: 1; }
-
-.autorBloco {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.deletar:hover {
+  opacity: 1;
 }
 
-.autorNome {
+.inputEdit {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
   color: var(--text);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
+  outline: none;
+  font-size: 0.92rem;
 }
 
-.autorNome:hover {
-  opacity: 0.9;
+.textareaEdit {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  resize: vertical;
+  font-size: 0.92rem;
+  font-family: inherit;
+}
+
+.salvar {
+  background: var(--primary);
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.cancelar {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
 }

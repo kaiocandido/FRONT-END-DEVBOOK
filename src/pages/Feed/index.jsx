@@ -81,6 +81,12 @@ export default function Feed() {
     setPosts((prev) => prev.filter((p) => p.id !== id))
   }
 
+  function handlePostAtualizado(id, postAtualizado) {
+    setPosts((prev) =>
+      prev.map((post) => (post.id === id ? postAtualizado : post))
+    )
+  }
+
   async function handleSeguir(id) {
     try {
       await seguirUsuario(id)
@@ -151,7 +157,12 @@ export default function Feed() {
           )}
 
           {posts.map((post) => (
-            <PostCard key={post.id} post={post} onDelete={handlePostDeletado} />
+            <PostCard
+              key={post.id}
+              post={post}
+              onDelete={handlePostDeletado}
+              onUpdate={handlePostAtualizado}
+            />
           ))}
         </div>
       </main>

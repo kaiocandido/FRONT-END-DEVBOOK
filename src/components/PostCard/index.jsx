@@ -1,14 +1,24 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { curtirPublicacao, descurtirPublicacao, deletarPublicacao } from '../../services/api'
+import {
+  curtirPublicacao,
+  descurtirPublicacao,
+  deletarPublicacao,
+  atualizarPublicacao,
+} from '../../services/api'
 import { useAuth } from '../../context/AuthContext'
 import styles from './PostCard.module.css'
 
-export default function PostCard({ post, onDelete }) {
+export default function PostCard({ post, onDelete, onUpdate }) {
   const { usuarioId } = useAuth()
   const [curtidas, setCurtidas] = useState(post.curtidas)
   const [curtido, setCurtido] = useState(false)
   const [deletando, setDeletando] = useState(false)
+
+  const [editando, setEditando] = useState(false)
+  const [salvando, setSalvando] = useState(false)
+  const [tituloEditado, setTituloEditado] = useState(post.titulo)
+  const [conteudoEditado, setConteudoEditado] = useState(post.conteudo)
 
   async function handleCurtir() {
     try {
@@ -21,7 +31,7 @@ export default function PostCard({ post, onDelete }) {
       }
       setCurtido(!curtido)
     } catch {
-      // silencioso — API retorna 403 se já curtiu
+      // silencioso
     }
   }
 
@@ -37,6 +47,40 @@ export default function PostCard({ post, onDelete }) {
     }
   }
 
+  function handleCancelarEdicao() {
+    setTituloEditado(post.titulo)
+    setConteudoEditado(post.conteudo)
+    setEditando(false)
+  }
+
+  async function handleSalvarEdicao() {
+    if (!tituloEditado.trim() || !conteudoEditado.trim()) {
+      alert('Título e conteúdo são obrigatórios.')
+      return
+    }
+
+    setSalvando(true)
+    try {
+      const { data } = await atualizarPublicacao(post.id, {
+        titulo: tituloEditado,
+        conteudo: conteudoEditado,
+      })
+
+      onUpdate?.(post.id, {
+        ...post,
+        ...data,
+        titulo: data?.titulo ?? tituloEditado,
+        conteudo: data?.conteudo ?? conteudoEditado,
+      })
+
+      setEditando(false)
+    } catch (e) {
+      alert(e.response?.data?.erro || 'Erro ao atualizar publicação.')
+    } finally {
+      setSalvando(false)
+    }
+  }
+
   const ehAutor = Number(usuarioId) === Number(post.autorId)
 
   return (
@@ -47,7 +91,7 @@ export default function PostCard({ post, onDelete }) {
             {post.autorNome || 'Usuário'}
           </Link>
           <Link to={`/perfil/${post.autorId}`} className={styles.autor}>
-            @{post.autorNick}
+            @{post.autorNick || 'semnick'}
           </Link>
         </div>
 
@@ -56,27 +100,73 @@ export default function PostCard({ post, onDelete }) {
         </time>
       </header>
 
-      <h3 className={styles.titulo}>{post.titulo}</h3>
-      <p className={styles.conteudo}>{post.conteudo}</p>
+      {editando ? (
+        <>
+          <input
+            className={styles.inputEdit}
+            value={tituloEditado}
+            onChange={(e) => setTituloEditado(e.target.value)}
+            placeholder="Título"
+          />
+          <textarea
+            className={styles.textareaEdit}
+            value={conteudoEditado}
+            onChange={(e) => setConteudoEditado(e.target.value)}
+            placeholder="Conteúdo"
+          />
 
-      <footer className={styles.footer}>
-        <button
-          className={`${styles.curtir} ${curtido ? styles.curtido : ''}`}
-          onClick={handleCurtir}
-        >
-          {curtido ? '♥' : '♡'} {curtidas}
-        </button>
+          <footer className={styles.footer}>
+            <button
+              className={styles.salvar}
+              onClick={handleSalvarEdicao}
+              disabled={salvando}
+            >
+              {salvando ? 'Salvando...' : 'Salvar'}
+            </button>
 
-        {ehAutor && (
-          <button
-            className={styles.deletar}
-            onClick={handleDeletar}
-            disabled={deletando}
-          >
-            {deletando ? '...' : 'Excluir'}
-          </button>
-        )}
-      </footer>
+            <button
+              className={styles.cancelar}
+              onClick={handleCancelarEdicao}
+              disabled={salvando}
+            >
+              Cancelar
+            </button>
+          </footer>
+        </>
+      ) : (
+        <>
+          <h3 className={styles.titulo}>{post.titulo}</h3>
+          <p className={styles.conteudo}>{post.conteudo}</p>
+
+          <footer className={styles.footer}>
+            <button
+              className={`${styles.curtir} ${curtido ? styles.curtido : ''}`}
+              onClick={handleCurtir}
+            >
+              {curtido ? '♥' : '♡'} {curtidas}
+            </button>
+
+            {ehAutor && (
+              <>
+                <button
+                  className={styles.editar}
+                  onClick={() => setEditando(true)}
+                >
+                  Editar
+                </button>
+
+                <button
+                  className={styles.deletar}
+                  onClick={handleDeletar}
+                  disabled={deletando}
+                >
+                  {deletando ? '...' : 'Excluir'}
+                </button>
+              </>
+            )}
+          </footer>
+        </>
+      )}
     </article>
   )
 }
