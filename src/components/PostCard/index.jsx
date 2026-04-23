@@ -42,15 +42,23 @@ export default function PostCard({ post, onDelete }) {
   return (
     <article className={styles.card}>
       <header className={styles.header}>
-        <Link to={`/perfil/${post.autorId}`} className={styles.autor}>
-          @{post.autorNick}
-        </Link>
+        <div className={styles.autorBloco}>
+          <Link to={`/perfil/${post.autorId}`} className={styles.autorNome}>
+            {post.autorNome || 'Usuário'}
+          </Link>
+          <Link to={`/perfil/${post.autorId}`} className={styles.autor}>
+            @{post.autorNick}
+          </Link>
+        </div>
+
         <time className={styles.data}>
           {new Date(post.criadaEm).toLocaleDateString('pt-BR')}
         </time>
       </header>
+
       <h3 className={styles.titulo}>{post.titulo}</h3>
       <p className={styles.conteudo}>{post.conteudo}</p>
+
       <footer className={styles.footer}>
         <button
           className={`${styles.curtir} ${curtido ? styles.curtido : ''}`}
@@ -58,6 +66,7 @@ export default function PostCard({ post, onDelete }) {
         >
           {curtido ? '♥' : '♡'} {curtidas}
         </button>
+
         {ehAutor && (
           <button
             className={styles.deletar}

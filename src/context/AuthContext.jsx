@@ -20,7 +20,7 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (email, senha) => {
     const { data } = await loginApi({ email, senha })
-    const novoToken = data
+    const novoToken = data.token 
     localStorage.setItem('@devbook:token', novoToken)
     setToken(novoToken)
     setUsuarioId(parseJwtPayload(novoToken)?.usuarioId)

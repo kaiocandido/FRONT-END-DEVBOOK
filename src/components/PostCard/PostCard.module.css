@@ -75,3 +75,20 @@
 }
 
 .deletar:hover { opacity: 1; }
+
+.autorBloco {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.autorNome {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.autorNome:hover {
+  opacity: 0.9;
+}
