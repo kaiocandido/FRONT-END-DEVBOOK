@@ -1,0 +1,10 @@
+/* mesma estrutura visual do Login */
+.page { composes: page from '../Login/Login.module.css'; }
+.card { composes: card from '../Login/Login.module.css'; }
+.logo { composes: logo from '../Login/Login.module.css'; }
+.sub { composes: sub from '../Login/Login.module.css'; }
+.form { composes: form from '../Login/Login.module.css'; }
+.input { composes: input from '../Login/Login.module.css'; }
+.btn { composes: btn from '../Login/Login.module.css'; }
+.erro { composes: erro from '../Login/Login.module.css'; }
+.footer { composes: footer from '../Login/Login.module.css'; }

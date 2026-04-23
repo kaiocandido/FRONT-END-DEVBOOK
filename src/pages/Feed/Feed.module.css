@@ -1,0 +1,27 @@
+.main {
+  min-height: calc(100vh - 56px);
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  padding: 28px 16px;
+}
+
+.content {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.erro {
+  text-align: center;
+  color: var(--danger);
+  padding: 20px;
+}
+
+.vazio {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 32px;
+}
